@@ -2,71 +2,174 @@
 
 ## Objetivo
 
-Este documento apresenta o primeiro levantamento das fontes de dados que poderão ser utilizadas no desenvolvimento do EcoMonitor Brasil.
+Este documento apresenta as fontes de dados utilizadas no EcoMonitor Brasil, os tipos de dados coletados, a forma de aquisição, o armazenamento e o objetivo de uso dessas informações dentro da aplicação.
 
-As fontes foram selecionadas considerando a disponibilidade pública dos dados, a relação com os Objetivos de Desenvolvimento Sustentável e a possibilidade de integração com Python.
+O Data Summary Report foi atualizado no TP2 para refletir a evolução do projeto, que passou a integrar dados provenientes de API, WebScraping e arquivos enviados pelo usuário.
 
 ## Fontes de Dados
 
-### Open-Meteo
+### 1. Open-Meteo
 
 **Tipo de fonte:** API REST pública.
 
-**Dados disponíveis:** temperatura, precipitação, velocidade do vento, umidade e outras informações meteorológicas.
+**Forma de coleta:** requisições HTTP utilizando a biblioteca `requests`.
 
-**Objetivo de uso:** fornecer dados climáticos que possam ser utilizados para acompanhar condições ambientais e analisar variações ao longo do tempo.
+**Dados coletados:**
+- data;
+- temperatura máxima;
+- temperatura mínima;
+- precipitação.
 
-### IBGE
+**Objetivo de uso:**
+fornecer dados meteorológicos para diferentes cidades brasileiras e permitir a visualização de indicadores climáticos na aplicação.
 
-**Tipo de fonte:** API e bases públicas.
+**Formato dos dados:**
+JSON convertido para DataFrame utilizando Pandas.
 
-**Dados disponíveis:** informações sobre estados, municípios, regiões e outros dados geográficos e socioeconômicos.
+**Armazenamento:**
+os dados coletados são salvos em arquivos CSV no diretório:
 
-**Objetivo de uso:** auxiliar na organização geográfica dos dados e permitir que os indicadores ambientais sejam relacionados a diferentes localidades brasileiras.
+`data/raw/`
 
-### INPE
+**Exemplo:**
 
-**Tipo de fonte:** bases públicas e serviços de dados ambientais.
+`data/raw/open_meteo_cuiaba_mt.csv`
 
-**Dados disponíveis:** informações relacionadas a queimadas, focos de calor, desmatamento e monitoramento ambiental.
+## 2. INPE — Notícias Ambientais
 
-**Objetivo de uso:** permitir o acompanhamento de eventos ambientais relacionados ao ODS 13 e ao ODS 15, especialmente queimadas e alterações na cobertura vegetal.
+**Tipo de fonte:** página web pública.
 
-### Portal Brasileiro de Dados Abertos
+**Forma de coleta:** WebScraping.
 
-**Tipo de fonte:** conjuntos de dados públicos disponibilizados por diferentes órgãos governamentais.
+**Tecnologias utilizadas:**
+- Requests;
+- BeautifulSoup.
 
-**Dados disponíveis:** informações ambientais, territoriais e relacionadas à sustentabilidade.
+**Dados coletados:**
+- título da notícia;
+- URL da notícia.
 
-**Objetivo de uso:** complementar o projeto com novos indicadores e bases públicas relevantes durante as próximas etapas.
+**Objetivo de uso:**
+complementar os indicadores ambientais com informações e notícias relacionadas a clima, meio ambiente, monitoramento ambiental e sustentabilidade.
 
-## Tipos de Dados Esperados
+Antes da coleta, é realizada a verificação das permissões de acesso por meio do arquivo `robots.txt`.
 
-Os dados utilizados no projeto poderão incluir:
+O código de WebScraping é executado separadamente da aplicação Streamlit.
 
-- dados numéricos, como temperatura, precipitação e quantidade de focos de calor;
-- dados temporais, como data e horário dos registros;
-- dados geográficos, como estado, município, latitude e longitude;
-- dados categóricos relacionados aos diferentes tipos de indicadores ambientais.
+**Armazenamento:**
+os dados coletados são salvos em:
 
-## Forma de Utilização
+`data/processed/noticias_inpe.csv`
 
-Os dados serão inicialmente coletados por meio de APIs e bases públicas.
+A aplicação Streamlit apenas lê o arquivo processado, evitando executar a raspagem durante a interação do usuário.
 
-Em seguida, serão tratados e organizados utilizando Python.
+## 3. Arquivos CSV enviados pelo usuário
 
-Os dados originais serão armazenados na pasta:
+**Tipo de fonte:** arquivo externo fornecido pelo usuário.
 
-`data/raw`
+**Forma de entrada:** upload realizado através da aplicação Streamlit utilizando `st.file_uploader`.
 
-Os dados tratados e preparados para análise serão armazenados na pasta:
+**Formato aceito:**
+CSV.
 
-`data/processed`
+**Objetivo de uso:**
+permitir que o usuário complemente as informações existentes na aplicação com novos conjuntos de dados.
 
-Nas etapas seguintes do projeto, essas informações serão utilizadas para construir gráficos, indicadores e análises dentro do dashboard desenvolvido em Streamlit.
+Os arquivos enviados são validados antes da utilização.
 
-## Considerações Iniciais
+Após a leitura, os dados são exibidos em formato de tabela e podem ser novamente exportados em CSV.
 
-As fontes apresentadas neste documento representam o planejamento inicial do projeto.
+## Tipos de Dados
 
-Durante o desenvolvimento dos próximos TPs, poderão ser adicionadas, substituídas ou ajustadas fontes de dados de acordo com a disponibilidade, qualidade e relevância das informações encontradas.
+Os dados utilizados no projeto incluem diferentes tipos de informação.
+
+### Dados Numéricos
+
+Exemplos:
+- temperatura máxima;
+- temperatura mínima;
+- precipitação;
+- quantidade de notícias;
+- frequência de palavras;
+- quantidade de linhas e colunas de arquivos enviados.
+
+### Dados Temporais
+
+Exemplo:
+- datas associadas aos registros meteorológicos.
+
+### Dados Textuais
+
+Exemplos:
+- títulos de notícias ambientais;
+- palavras extraídas dos títulos.
+
+Esses dados são utilizados para geração de estatísticas e nuvem de palavras.
+
+### Dados Categóricos
+
+Exemplos:
+- cidade selecionada;
+- indicador ambiental escolhido pelo usuário.
+
+### Dados de Referência
+
+Exemplos:
+- URLs das notícias ambientais;
+- identificação da fonte dos dados.
+
+## Processamento dos Dados
+
+Os dados passam por diferentes etapas antes de serem utilizados pela aplicação.
+
+### Dados da Open-Meteo
+
+Fluxo:
+
+1. requisição à API;
+2. recebimento dos dados em JSON;
+3. conversão para DataFrame;
+4. organização das colunas;
+5. armazenamento em CSV;
+6. visualização no Streamlit.
+
+### Notícias do INPE
+
+Fluxo:
+
+1. verificação do `robots.txt`;
+2. requisição da página;
+3. processamento do HTML com BeautifulSoup;
+4. identificação dos links e títulos das notícias;
+5. remoção de duplicidades;
+6. conversão para DataFrame;
+7. armazenamento em CSV;
+8. leitura do arquivo pela aplicação;
+9. geração de estatísticas e nuvem de palavras.
+
+### Arquivos enviados pelo usuário
+
+Fluxo:
+
+1. upload do CSV;
+2. tentativa de leitura utilizando Pandas;
+3. validação básica;
+4. criação de DataFrame;
+5. armazenamento temporário em estado de sessão;
+6. visualização na interface;
+7. disponibilização para download.
+
+## Organização dos Diretórios
+
+A organização dos dados segue a estrutura definida para o projeto.
+
+```text
+data/
+├── raw/
+│   └── dados coletados diretamente das APIs
+│
+├── processed/
+│   └── noticias_inpe.csv
+│
+└── external/
+    └── espaço destinado a fontes externas adicionais
