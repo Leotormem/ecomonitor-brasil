@@ -13,7 +13,10 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
 
-from src.data.coleta_open_meteo import coletar_dados_cuiaba
+from src.data.coleta_open_meteo import (
+    CIDADES,
+    coletar_dados_meteorologicos,
+)
 
 
 # ---------------------------------------------------------
@@ -24,6 +27,36 @@ st.set_page_config(
     page_title="EcoMonitor Brasil",
     page_icon="🌱",
     layout="wide"
+)
+
+
+# ---------------------------------------------------------
+# BARRA LATERAL
+# ---------------------------------------------------------
+
+st.sidebar.header("Configurações")
+
+cidade_selecionada = st.sidebar.selectbox(
+    "Selecione uma cidade:",
+    options=list(CIDADES.keys())
+)
+
+indicadores = st.sidebar.multiselect(
+    "Indicadores para exibir no gráfico:",
+    options=[
+        "Temperatura Máxima (°C)",
+        "Temperatura Mínima (°C)",
+        "Precipitação (mm)"
+    ],
+    default=[
+        "Temperatura Máxima (°C)",
+        "Temperatura Mínima (°C)"
+    ]
+)
+
+mostrar_tabela = st.sidebar.checkbox(
+    "Exibir tabela de dados",
+    value=True
 )
 
 
@@ -105,11 +138,10 @@ st.markdown("""
 # DADOS AMBIENTAIS
 # ---------------------------------------------------------
 
-st.markdown("### Amostra de Dados Ambientais")
+st.markdown(f"### Dados Ambientais — {cidade_selecionada}")
 
 try:
-    # Coleta dos dados
-    df = coletar_dados_cuiaba()
+    df = coletar_dados_meteorologicos(cidade_selecionada)
 
     # -----------------------------------------------------
     # INDICADORES PRINCIPAIS
@@ -140,40 +172,44 @@ try:
         )
 
     # -----------------------------------------------------
-    # GRÁFICO DE TEMPERATURA
+    # GRÁFICO
     # -----------------------------------------------------
 
-    st.markdown("### Evolução das Temperaturas")
+    st.markdown("### Evolução dos Indicadores")
 
-    df_grafico = df.copy()
+    if indicadores:
+        df_grafico = df.copy()
 
-    df_grafico["Data"] = pd.to_datetime(df_grafico["Data"])
+        df_grafico["Data"] = pd.to_datetime(df_grafico["Data"])
 
-    df_grafico = df_grafico.set_index("Data")
+        df_grafico = df_grafico.set_index("Data")
 
-    st.line_chart(
-        df_grafico[
-            [
-                "Temperatura Máxima (°C)",
-                "Temperatura Mínima (°C)"
-            ]
-        ]
-    )
+        st.line_chart(
+            df_grafico[indicadores]
+        )
+
+    else:
+        st.info(
+            "Selecione pelo menos um indicador na barra lateral "
+            "para visualizar o gráfico."
+        )
 
     # -----------------------------------------------------
     # TABELA
     # -----------------------------------------------------
 
-    st.markdown("### Dados Coletados")
+    if mostrar_tabela:
+        st.markdown("### Dados Coletados")
 
-    st.dataframe(
-        df,
-        use_container_width=True,
-        hide_index=True
-    )
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
+        )
 
     st.caption(
-        "Fonte: Open-Meteo API — dados meteorológicos para Cuiabá/MT."
+        f"Fonte: Open-Meteo API — dados meteorológicos para "
+        f"{cidade_selecionada}."
     )
 
 except Exception as erro:

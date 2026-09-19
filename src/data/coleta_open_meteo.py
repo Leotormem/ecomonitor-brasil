@@ -4,36 +4,62 @@ import pandas as pd
 import requests
 
 
-# Caminho da raiz do projeto
 ROOT_DIR = Path(__file__).resolve().parents[2]
-
-# Pasta onde os dados brutos serão armazenados
 RAW_DIR = ROOT_DIR / "data" / "raw"
 
-# Garante que a pasta exista
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def coletar_dados_cuiaba():
-    """
-    Coleta dados meteorológicos da Open-Meteo para Cuiabá/MT.
+CIDADES = {
+    "Cuiabá - MT": {
+        "latitude": -15.60,
+        "longitude": -56.10,
+        "timezone": "America/Cuiaba"
+    },
+    "Goiânia - GO": {
+        "latitude": -16.68,
+        "longitude": -49.25,
+        "timezone": "America/Sao_Paulo"
+    },
+    "Brasília - DF": {
+        "latitude": -15.78,
+        "longitude": -47.93,
+        "timezone": "America/Sao_Paulo"
+    },
+    "São Paulo - SP": {
+        "latitude": -23.55,
+        "longitude": -46.63,
+        "timezone": "America/Sao_Paulo"
+    },
+    "Rio de Janeiro - RJ": {
+        "latitude": -22.91,
+        "longitude": -43.17,
+        "timezone": "America/Sao_Paulo"
+    }
+}
 
-    Retorna:
-        pandas.DataFrame: DataFrame com data, temperatura máxima,
-        temperatura mínima e precipitação.
+
+def coletar_dados_meteorologicos(cidade):
     """
+    Coleta dados meteorológicos da Open-Meteo
+    para a cidade selecionada.
+    """
+
+    dados_cidade = CIDADES[cidade]
+
+    latitude = dados_cidade["latitude"]
+    longitude = dados_cidade["longitude"]
+    timezone = dados_cidade["timezone"]
 
     url = (
         "https://api.open-meteo.com/v1/forecast"
-        "?latitude=-15.60"
-        "&longitude=-56.10"
+        f"?latitude={latitude}"
+        f"&longitude={longitude}"
         "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum"
-        "&timezone=America%2FCuiaba"
+        f"&timezone={timezone}"
     )
 
     response = requests.get(url, timeout=10)
-
-    # Gera erro caso a API não responda corretamente
     response.raise_for_status()
 
     dados = response.json()
@@ -45,10 +71,18 @@ def coletar_dados_cuiaba():
         "Precipitação (mm)": dados["daily"]["precipitation_sum"]
     })
 
-    # Caminho do arquivo
-    caminho_arquivo = RAW_DIR / "open_meteo_cuiaba.csv"
+    nome_arquivo = (
+        cidade.lower()
+        .replace(" ", "_")
+        .replace("-", "")
+        .replace("á", "a")
+        .replace("ã", "a")
+        .replace("í", "i")
+        .replace("ó", "o")
+    )
 
-    # Salva os dados brutos
+    caminho_arquivo = RAW_DIR / f"open_meteo_{nome_arquivo}.csv"
+
     df.to_csv(
         caminho_arquivo,
         index=False,
@@ -59,15 +93,15 @@ def coletar_dados_cuiaba():
 
 
 if __name__ == "__main__":
+    cidade = "Cuiabá - MT"
 
     try:
-        df = coletar_dados_cuiaba()
+        df = coletar_dados_meteorologicos(cidade)
 
         print(df)
 
         print(
-            "\nDados coletados e salvos com sucesso em:"
-            "\ndata/raw/open_meteo_cuiaba.csv"
+            f"\nDados de {cidade} coletados e salvos com sucesso."
         )
 
     except requests.RequestException as erro:
