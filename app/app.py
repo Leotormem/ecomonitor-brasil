@@ -37,6 +37,16 @@ pagina = st.navigation(
                 icon="📰",
             ),
             st.Page(
+                "paginas/desmatamento.py",
+                title="Desmatamento PRODES",
+                icon="🌳",
+            ),
+            st.Page(
+                "paginas/api_ecomonitor.py",
+                title="API EcoMonitor",
+                icon="🔌",
+            ),
+            st.Page(
                 "paginas/dados.py",
                 title="Base de Dados",
                 icon="📂",
