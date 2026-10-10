@@ -1,0 +1,8 @@
+# EcoMonitor Brasil
+
+Plataforma interativa para monitoramento de indicadores ambientais e sustentabilidade.
+
+## Links do projeto
+
+- Aplicação online: https://ecomonitor-brasil-wqhkx2ffy8cqvappehedvjy.streamlit.app/
+- Repositório GitHub: https://github.com/Leotormem/ecomonitor-brasil
