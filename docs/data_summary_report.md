@@ -1,175 +1,527 @@
 # Data Summary Report — EcoMonitor Brasil
 
-## Objetivo
+## Visão Geral
 
-Este documento apresenta as fontes de dados utilizadas no EcoMonitor Brasil, os tipos de dados coletados, a forma de aquisição, o armazenamento e o objetivo de uso dessas informações dentro da aplicação.
+O EcoMonitor Brasil utiliza diferentes fontes de dados ambientais para reunir informações climáticas, notícias ambientais, dados de desmatamento e registros enviados pelo usuário.
 
-O Data Summary Report foi atualizado no TP2 para refletir a evolução do projeto, que passou a integrar dados provenientes de API, WebScraping e arquivos enviados pelo usuário.
+O projeto combina:
 
-## Fontes de Dados
+- API pública;
+- WebScraping com BeautifulSoup;
+- coleta dinâmica com Selenium;
+- arquivos CSV;
+- FastAPI para consulta e envio de dados;
+- Streamlit para visualização e interação.
 
-### 1. Open-Meteo
+Este relatório apresenta as principais fontes, estruturas, tratamentos, validações e limitações dos dados utilizados.
 
-**Tipo de fonte:** API REST pública.
+---
 
-**Forma de coleta:** requisições HTTP utilizando a biblioteca `requests`.
+## 1. Fontes de Dados
 
-**Dados coletados:**
-- data;
+As principais fontes utilizadas são:
+
+| Fonte | Tipo | Método de Coleta | Dados |
+|---|---|---|---|
+| Open-Meteo | API | Requests | Temperatura e precipitação |
+| INPE | Página web | Requests + BeautifulSoup | Notícias ambientais |
+| TerraBrasilis / PRODES | Página dinâmica | Selenium + BeautifulSoup | Desmatamento por UF e ano |
+| Usuário | Formulário/API | FastAPI POST | Registros ambientais |
+| Usuário | Arquivo | Upload CSV | Dados complementares |
+
+---
+
+## 2. Open-Meteo
+
+A Open-Meteo é utilizada para obtenção de dados meteorológicos.
+
+Principais indicadores:
+
 - temperatura máxima;
 - temperatura mínima;
 - precipitação.
 
-**Objetivo de uso:**
-fornecer dados meteorológicos para diferentes cidades brasileiras e permitir a visualização de indicadores climáticos na aplicação.
+A coleta é realizada por meio de requisições HTTP e os dados retornados em JSON são organizados em DataFrames com Pandas.
 
-**Formato dos dados:**
-JSON convertido para DataFrame utilizando Pandas.
+Fluxo:
 
-**Armazenamento:**
-os dados coletados são salvos em arquivos CSV no diretório:
+Open-Meteo  
+↓  
+Requests  
+↓  
+JSON  
+↓  
+Pandas  
+↓  
+Streamlit
 
-`data/raw/`
+Os dados são utilizados principalmente na página Dashboard Climático.
 
-**Exemplo:**
+### Limitações
 
-`data/raw/open_meteo_cuiaba_mt.csv`
+A consulta depende da disponibilidade da API.
 
-## 2. INPE — Notícias Ambientais
+Os dados utilizados no projeto devem ser interpretados conforme o período e o tipo de informação retornados pela fonte.
 
-**Tipo de fonte:** página web pública.
+---
 
-**Forma de coleta:** WebScraping.
+## 3. Notícias Ambientais — INPE
 
-**Tecnologias utilizadas:**
+O INPE é utilizado como fonte de notícias ambientais.
+
+A coleta é realizada através de:
+
 - Requests;
-- BeautifulSoup.
+- BeautifulSoup;
+- Pandas.
 
-**Dados coletados:**
-- título da notícia;
-- URL da notícia.
+Os principais campos coletados são:
 
-**Objetivo de uso:**
-complementar os indicadores ambientais com informações e notícias relacionadas a clima, meio ambiente, monitoramento ambiental e sustentabilidade.
+| Campo | Descrição |
+|---|---|
+| titulo | Título da notícia |
+| url | Link da notícia |
 
-Antes da coleta, é realizada a verificação das permissões de acesso por meio do arquivo `robots.txt`.
-
-O código de WebScraping é executado separadamente da aplicação Streamlit.
-
-**Armazenamento:**
-os dados coletados são salvos em:
+Os dados são armazenados em:
 
 `data/processed/noticias_inpe.csv`
 
-A aplicação Streamlit apenas lê o arquivo processado, evitando executar a raspagem durante a interação do usuário.
+O arquivo é utilizado na página Radar Ambiental para:
 
-## 3. Arquivos CSV enviados pelo usuário
+- exibição das notícias;
+- contagem de registros;
+- análise das palavras mais frequentes;
+- geração de nuvem de palavras;
+- acesso aos links originais.
 
-**Tipo de fonte:** arquivo externo fornecido pelo usuário.
+### Tratamento
 
-**Forma de entrada:** upload realizado através da aplicação Streamlit utilizando `st.file_uploader`.
+São aplicadas operações básicas como:
 
-**Formato aceito:**
-CSV.
+- remoção de espaços extras;
+- eliminação de registros vazios;
+- remoção de duplicidades;
+- organização em DataFrame.
 
-**Objetivo de uso:**
-permitir que o usuário complemente as informações existentes na aplicação com novos conjuntos de dados.
+### Limitações
 
-Os arquivos enviados são validados antes da utilização.
+Mudanças na estrutura HTML do site podem exigir ajustes no script de coleta.
 
-Após a leitura, os dados são exibidos em formato de tabela e podem ser novamente exportados em CSV.
+Atualmente, a base utiliza principalmente títulos e URLs, e não o conteúdo completo das notícias.
 
-## Tipos de Dados
+---
 
-Os dados utilizados no projeto incluem diferentes tipos de informação.
+## 4. PRODES / TerraBrasilis
 
-### Dados Numéricos
+No TP3 foi incorporada uma nova fonte de dados através do PRODES/INPE, disponível no TerraBrasilis.
 
-Exemplos:
-- temperatura máxima;
-- temperatura mínima;
-- precipitação;
-- quantidade de notícias;
-- frequência de palavras;
-- quantidade de linhas e colunas de arquivos enviados.
+Os dados utilizados representam informações históricas de desmatamento.
 
-### Dados Temporais
+Principais campos:
+
+| Campo | Descrição |
+|---|---|
+| UF | Unidade federativa |
+| Ano | Ano de referência |
+| Area_km2 | Área desmatada em km² |
+
+O arquivo processado é armazenado em:
+
+`data/processed/desmatamento_prodes.csv`
+
+---
+
+## 5. Uso de Selenium
+
+A página do TerraBrasilis carrega a tabela de dados dinamicamente através de JavaScript.
+
+Por esse motivo, Requests e BeautifulSoup sozinhos não disponibilizam diretamente toda a tabela necessária.
+
+O Selenium é utilizado para:
+
+- abrir a página;
+- executar o JavaScript;
+- aguardar o carregamento dos dados;
+- capturar o HTML renderizado.
+
+Depois disso, o BeautifulSoup realiza a extração da tabela.
+
+Fluxo:
+
+TerraBrasilis  
+↓  
+Selenium  
+↓  
+HTML renderizado  
+↓  
+BeautifulSoup  
+↓  
+Pandas  
+↓  
+CSV
+
+O script utilizado está em:
+
+`src/data/coleta_prodes_selenium.py`
+
+---
+
+## 6. Snapshot do TerraBrasilis
+
+O HTML renderizado é salvo em:
+
+`data/raw/terrabrasilis_prodes_renderizado.html`
+
+Esse arquivo pode ser utilizado para:
+
+- conferência da coleta;
+- depuração;
+- rastreabilidade;
+- processamento posterior.
+
+---
+
+## 7. Tratamento dos Dados PRODES
+
+Após a coleta, são realizadas etapas de limpeza e transformação.
+
+Entre elas:
+
+- identificação da UF;
+- remoção de textos adicionais no nome da UF;
+- tratamento do ano;
+- remoção da unidade de medida;
+- conversão de valores brasileiros para formato numérico;
+- criação da coluna `Area_km2`.
 
 Exemplo:
-- datas associadas aos registros meteorológicos.
 
-### Dados Textuais
+`1.234,56`
 
-Exemplos:
-- títulos de notícias ambientais;
-- palavras extraídas dos títulos.
+é convertido para:
 
-Esses dados são utilizados para geração de estatísticas e nuvem de palavras.
+`1234.56`
 
-### Dados Categóricos
+---
 
-Exemplos:
-- cidade selecionada;
-- indicador ambiental escolhido pelo usuário.
+## 8. Validação dos Dados PRODES
 
-### Dados de Referência
+Antes de salvar os dados processados, são realizadas verificações.
 
-Exemplos:
-- URLs das notícias ambientais;
-- identificação da fonte dos dados.
+Entre elas:
 
-## Processamento dos Dados
+- DataFrame não vazio;
+- presença das unidades federativas esperadas;
+- presença de linhas anuais;
+- quantidade adequada de registros;
+- conversão correta dos valores numéricos.
 
-Os dados passam por diferentes etapas antes de serem utilizados pela aplicação.
+A coleta atual gerou aproximadamente:
 
-### Dados da Open-Meteo
+- 342 registros;
+- 9 unidades federativas.
 
-Fluxo:
+A quantidade poderá mudar caso a fonte seja atualizada.
 
-1. requisição à API;
-2. recebimento dos dados em JSON;
-3. conversão para DataFrame;
-4. organização das colunas;
-5. armazenamento em CSV;
-6. visualização no Streamlit.
+---
 
-### Notícias do INPE
+## 9. Uso dos Dados PRODES
 
-Fluxo:
+Os dados são utilizados na página Desmatamento PRODES.
 
-1. verificação do `robots.txt`;
-2. requisição da página;
-3. processamento do HTML com BeautifulSoup;
-4. identificação dos links e títulos das notícias;
-5. remoção de duplicidades;
-6. conversão para DataFrame;
-7. armazenamento em CSV;
-8. leitura do arquivo pela aplicação;
-9. geração de estatísticas e nuvem de palavras.
+As análises incluem:
 
-### Arquivos enviados pelo usuário
+- filtro por UF;
+- filtro por período;
+- maior área desmatada;
+- ano de maior desmatamento;
+- média anual;
+- série histórica;
+- comparação entre estados.
 
-Fluxo:
+Os mesmos dados também podem ser consultados através de:
 
-1. upload do CSV;
-2. tentativa de leitura utilizando Pandas;
-3. validação básica;
-4. criação de DataFrame;
-5. armazenamento temporário em estado de sessão;
-6. visualização na interface;
-7. disponibilização para download.
+`GET /prodes`
 
-## Organização dos Diretórios
+---
 
-A organização dos dados segue a estrutura definida para o projeto.
+## 10. Registros Ambientais
 
-```text
-data/
-├── raw/
-│   └── dados coletados diretamente das APIs
-│
-├── processed/
-│   └── noticias_inpe.csv
-│
-└── external/
-    └── espaço destinado a fontes externas adicionais
+No TP3 foi criada uma forma de entrada de dados através da FastAPI.
+
+O usuário pode enviar registros contendo:
+
+| Campo | Descrição |
+|---|---|
+| localidade | Local do registro |
+| indicador | Indicador ambiental |
+| valor | Valor numérico |
+| unidade | Unidade de medida |
+| fonte | Origem da informação |
+
+Os dados são enviados através de:
+
+`POST /registros`
+
+e armazenados em:
+
+`data/processed/registros_ambientais.csv`
+
+---
+
+## 11. Validação dos Registros
+
+Os dados recebidos pela API são validados com Pydantic.
+
+São verificadas informações como:
+
+- campos obrigatórios;
+- tamanho mínimo dos textos;
+- tipo numérico do campo valor;
+- estrutura correta da requisição.
+
+Os registros armazenados podem ser consultados por:
+
+`GET /registros`
+
+---
+
+## 12. Upload de CSV
+
+A aplicação também permite o envio de arquivos CSV pelo usuário.
+
+A página Base de Dados permite:
+
+- carregar o arquivo;
+- visualizar os dados;
+- contar linhas e colunas;
+- verificar tipos;
+- verificar valores nulos;
+- gerar estatísticas descritivas;
+- fazer download dos dados.
+
+---
+
+## 13. Organização dos Arquivos
+
+Os dados são organizados principalmente em:
+
+`data/raw/`
+
+Utilizado para dados brutos e snapshots.
+
+`data/processed/`
+
+Utilizado para dados tratados e prontos para análise.
+
+Principais arquivos:
+
+- `noticias_inpe.csv`;
+- `desmatamento_prodes.csv`;
+- `registros_ambientais.csv`.
+
+`data/external/`
+
+Reservado para arquivos externos complementares.
+
+---
+
+## 14. Qualidade dos Dados
+
+As validações variam de acordo com a fonte.
+
+### Open-Meteo
+
+- resposta válida;
+- presença dos indicadores esperados;
+- estrutura temporal adequada.
+
+### Notícias INPE
+
+- título não vazio;
+- URL válida;
+- remoção de duplicidades.
+
+### PRODES
+
+- presença de dados;
+- UFs esperadas;
+- linhas anuais;
+- conversão numérica;
+- proteção contra coleta incompleta.
+
+### Registros Ambientais
+
+- validação Pydantic;
+- campos obrigatórios;
+- tipo correto dos dados.
+
+---
+
+## 15. Uso de Cache
+
+A aplicação utiliza `st.cache_data` para evitar leituras e processamentos repetitivos.
+
+O cache melhora:
+
+- tempo de carregamento;
+- desempenho;
+- experiência do usuário.
+
+---
+
+## 16. Uso de Session State
+
+O `st.session_state` é utilizado para preservar informações durante a interação do usuário com a aplicação.
+
+Essa funcionalidade ajuda a manter dados entre diferentes ações realizadas na interface.
+
+---
+
+## 17. FastAPI
+
+A FastAPI funciona como uma camada de acesso aos dados processados.
+
+Principais endpoints:
+
+- `GET /`
+- `GET /prodes`
+- `GET /noticias`
+- `POST /registros`
+- `GET /registros`
+
+A documentação automática está disponível em:
+
+`/docs`
+
+Durante o desenvolvimento local, a API utiliza:
+
+`http://127.0.0.1:8000`
+
+---
+
+## 18. Integração Streamlit e FastAPI
+
+A página API EcoMonitor realiza requisições para a FastAPI.
+
+Fluxo de consulta:
+
+Usuário  
+↓  
+Streamlit  
+↓  
+FastAPI  
+↓  
+CSV  
+↓  
+JSON  
+↓  
+Streamlit
+
+Fluxo de inclusão:
+
+Usuário  
+↓  
+Formulário Streamlit  
+↓  
+POST  
+↓  
+FastAPI  
+↓  
+CSV
+
+---
+
+## 19. Limitações
+
+As principais limitações atuais são:
+
+- dependência de fontes externas;
+- mudanças em páginas podem afetar o WebScraping;
+- Selenium depende da estrutura atual do TerraBrasilis;
+- a coleta PRODES precisa ser executada novamente para atualização;
+- os registros da API são armazenados em CSV;
+- CSV não é ideal para muitos usuários simultâneos;
+- a FastAPI está sendo executada localmente no desenvolvimento;
+- a base de notícias contém principalmente títulos e links.
+
+---
+
+## 20. Preparação para LLM
+
+Os dados atuais já permitem preparar futuras funcionalidades baseadas em Large Language Models.
+
+Possíveis aplicações:
+
+- resumo de notícias;
+- classificação temática;
+- análise de sentimento;
+- perguntas e respostas;
+- geração automática de relatórios;
+- interpretação dos resultados ambientais.
+
+Os cálculos numéricos continuarão sendo realizados em Python e Pandas.
+
+O LLM poderá ser utilizado principalmente para interpretar e apresentar os resultados em linguagem natural.
+
+---
+
+## 21. Fluxo Geral dos Dados
+
+Open-Meteo  
+↓  
+Requests  
+↓  
+Dados Climáticos  
+↓  
+Dashboard Climático
+
+INPE  
+↓  
+Requests + BeautifulSoup  
+↓  
+`noticias_inpe.csv`  
+↓  
+Radar Ambiental / FastAPI
+
+TerraBrasilis  
+↓  
+Selenium + BeautifulSoup  
+↓  
+`desmatamento_prodes.csv`  
+↓  
+Desmatamento PRODES / FastAPI
+
+Usuário  
+↓  
+Streamlit  
+↓  
+FastAPI  
+↓  
+`registros_ambientais.csv`
+
+---
+
+## Conclusão
+
+O EcoMonitor Brasil utiliza diferentes formas de aquisição de dados para construir uma visão integrada de informações ambientais.
+
+A Open-Meteo fornece dados estruturados através de API.
+
+O INPE fornece dados textuais coletados por WebScraping.
+
+O TerraBrasilis fornece dados dinâmicos de desmatamento coletados com Selenium e BeautifulSoup.
+
+A FastAPI permite consultar os dados processados e inserir novos registros.
+
+O Streamlit concentra a visualização e a interação com o usuário.
+
+A organização atual separa:
+
+- aquisição;
+- processamento;
+- armazenamento;
+- API;
+- visualização.
+
+Essa estrutura melhora a organização do projeto e também prepara a aplicação para futuras funcionalidades baseadas em Inteligência Artificial e Large Language Models.

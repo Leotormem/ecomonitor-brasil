@@ -4,35 +4,51 @@
 
 **EcoMonitor Brasil — Plataforma Inteligente para Monitoramento de Indicadores Ambientais e Sustentabilidade**
 
+---
+
 ## Problema de Negócio
 
-Dados ambientais importantes, como informações relacionadas ao clima, queimadas, desmatamento e outros indicadores de sustentabilidade, encontram-se distribuídos em diferentes fontes públicas.
+Dados ambientais relevantes, como informações climáticas, notícias ambientais e dados de desmatamento, encontram-se distribuídos em diferentes fontes públicas.
 
-Essa fragmentação dificulta a análise conjunta das informações, o acompanhamento de tendências e a identificação de riscos e situações críticas.
+Essa fragmentação dificulta a análise integrada das informações, o acompanhamento de tendências e a identificação de situações críticas.
 
-O EcoMonitor Brasil busca resolver esse problema por meio de uma aplicação interativa capaz de reunir dados ambientais e informações externas em um único ambiente, facilitando a visualização, a análise e o acompanhamento de indicadores relacionados à sustentabilidade.
+O EcoMonitor Brasil busca centralizar essas informações em uma aplicação interativa, permitindo visualizar, analisar e consultar diferentes indicadores ambientais em um único ambiente.
+
+No TP3, o projeto também passou a incorporar:
+
+- arquitetura multipáginas;
+- coleta de dados de páginas dinâmicas;
+- integração com dados históricos de desmatamento;
+- criação de uma API própria;
+- integração entre Streamlit e FastAPI;
+- preparação para futuras aplicações com LLM.
+
+---
 
 ## Objetivo Geral
 
-Desenvolver uma aplicação interativa em Python e Streamlit capaz de integrar, organizar, analisar e apresentar dados ambientais provenientes de diferentes fontes públicas, oferecendo suporte ao acompanhamento de indicadores relacionados à sustentabilidade e às mudanças climáticas.
+Desenvolver uma aplicação interativa em Python e Streamlit capaz de integrar, organizar, analisar e apresentar dados ambientais provenientes de diferentes fontes públicas, apoiando o acompanhamento de indicadores relacionados à sustentabilidade e às mudanças climáticas.
+
+---
 
 ## Objetivos Específicos
 
 - Integrar fontes públicas de dados ambientais.
-- Realizar coleta de dados por meio de APIs.
-- Utilizar WebScraping para obter informações de páginas web.
-- Organizar e armazenar os dados coletados em arquivos estruturados.
-- Desenvolver uma interface interativa em Streamlit.
-- Permitir ao usuário selecionar localidades e indicadores ambientais.
-- Apresentar métricas, gráficos e tabelas de forma dinâmica.
-- Exibir notícias ambientais coletadas por WebScraping.
-- Gerar estatísticas básicas a partir dos dados coletados.
-- Criar nuvens de palavras com base no conteúdo das notícias ambientais.
-- Utilizar cache para melhorar o desempenho da aplicação.
-- Utilizar estado de sessão para manter informações durante a interação do usuário.
+- Realizar coleta de dados por APIs.
+- Utilizar WebScraping com BeautifulSoup.
+- Utilizar Selenium quando a página exigir execução de JavaScript.
+- Armazenar os dados coletados em arquivos estruturados.
+- Criar uma aplicação multipáginas em Streamlit.
+- Disponibilizar métricas, gráficos e tabelas interativas.
 - Permitir upload e download de arquivos CSV.
-- Disponibilizar a aplicação por meio de deploy em ambiente web.
-- Utilizar Git e GitHub para controle de versão do projeto.
+- Utilizar cache e estado de sessão.
+- Integrar dados históricos do PRODES/INPE.
+- Criar uma API própria com FastAPI.
+- Implementar endpoints GET e POST.
+- Integrar Streamlit e FastAPI.
+- Preparar o projeto para futuras funcionalidades com LLM.
+
+---
 
 ## Pilar ESG
 
@@ -40,174 +56,477 @@ O projeto está relacionado principalmente ao pilar:
 
 **Environmental (E) — Ambiental.**
 
-A aplicação utiliza dados ambientais e climáticos com o objetivo de facilitar o acompanhamento de informações relacionadas à sustentabilidade e aos impactos ambientais.
+A aplicação utiliza informações climáticas, ambientais e de desmatamento para facilitar o acompanhamento de indicadores relacionados à sustentabilidade.
+
+---
 
 ## Objetivos de Desenvolvimento Sustentável
 
 ### ODS 13 — Ação Contra a Mudança Global do Clima
 
-O EcoMonitor Brasil está diretamente alinhado ao ODS 13 ao permitir o acompanhamento de informações meteorológicas e ambientais, contribuindo para a observação de condições climáticas e para a conscientização sobre questões relacionadas às mudanças climáticas.
+O projeto está relacionado ao ODS 13 por utilizar dados meteorológicos como:
+
+- temperatura máxima;
+- temperatura mínima;
+- precipitação.
+
+Essas informações ajudam no acompanhamento de condições climáticas e ambientais.
 
 ### ODS 15 — Vida Terrestre
 
-O projeto também se relaciona ao ODS 15, principalmente por incorporar conteúdos e informações ambientais relacionadas a queimadas, desmatamento, ecossistemas terrestres e monitoramento ambiental.
+O projeto também está alinhado ao ODS 15 por incorporar dados de desmatamento do PRODES/INPE e informações relacionadas ao monitoramento ambiental.
+
+Os dados permitem analisar:
+
+- evolução histórica do desmatamento;
+- comparação entre estados;
+- anos de maior desmatamento;
+- tendências relacionadas à cobertura vegetal.
+
+---
 
 ## Público-Alvo
 
-O público-alvo do EcoMonitor Brasil inclui:
+O público-alvo inclui:
 
 - gestores públicos;
-- empresas que desenvolvem ou acompanham iniciativas ESG;
+- empresas interessadas em ESG;
 - organizações ambientais;
 - pesquisadores;
 - instituições acadêmicas;
 - estudantes;
-- cidadãos interessados em sustentabilidade e monitoramento ambiental.
+- profissionais de análise de dados;
+- cidadãos interessados em sustentabilidade.
+
+---
 
 ## Stakeholders
 
-Os principais stakeholders do projeto são:
+Os principais stakeholders são:
 
 - usuários da aplicação;
 - gestores públicos;
 - organizações ambientais;
 - empresas interessadas em ESG;
-- pesquisadores e instituições acadêmicas;
+- pesquisadores;
+- instituições acadêmicas;
 - desenvolvedor responsável pelo projeto;
-- instituições responsáveis pelas fontes públicas de dados utilizadas.
+- instituições responsáveis pelas fontes de dados.
+
+---
 
 ## Escopo do Projeto
 
 O projeto contempla:
 
 - desenvolvimento em Python;
-- aplicação interativa utilizando Streamlit;
+- aplicação Streamlit;
+- arquitetura multipáginas;
 - coleta de dados por API;
 - WebScraping com BeautifulSoup;
-- armazenamento de dados em CSV;
-- processamento e análise dos dados;
-- criação de gráficos, métricas e tabelas;
-- geração de nuvem de palavras;
-- utilização de cache;
-- utilização de estado de sessão;
-- upload de arquivos CSV;
-- download de dados processados;
-- controle de versão com Git;
-- armazenamento do código no GitHub;
-- publicação da aplicação em ambiente web.
+- coleta dinâmica com Selenium;
+- armazenamento em CSV;
+- análise e visualização de dados;
+- upload e download de arquivos;
+- cache;
+- estado de sessão;
+- integração com dados PRODES;
+- FastAPI;
+- endpoints GET e POST;
+- integração Streamlit/FastAPI;
+- Git e GitHub;
+- publicação da aplicação;
+- preparação para uso futuro de LLM.
 
-## Fontes Utilizadas
+---
 
-As principais fontes utilizadas até o TP2 são:
+## Arquitetura da Aplicação
+
+No TP3, o EcoMonitor Brasil foi reorganizado em uma aplicação multipáginas.
+
+A navegação utiliza:
+
+- `st.navigation`;
+- `st.Page`.
+
+As páginas atuais são:
+
+- Início;
+- Dashboard Climático;
+- Radar Ambiental;
+- Desmatamento PRODES;
+- API EcoMonitor;
+- Base de Dados;
+- Sobre.
+
+Essa organização separa as funcionalidades e melhora a navegação do usuário.
+
+---
+
+## Fontes de Dados
 
 ### Open-Meteo
 
-Utilizada para coleta de dados meteorológicos, incluindo:
+Utilizada para dados meteorológicos.
+
+Principais indicadores:
 
 - temperatura máxima;
 - temperatura mínima;
 - precipitação.
 
-A coleta é realizada por meio de API REST.
+Método:
 
-### INPE
+- API REST;
+- Requests;
+- Pandas.
 
-Utilizado como fonte de informações ambientais e notícias.
+---
 
-As notícias são coletadas por meio de WebScraping utilizando:
+### INPE — Notícias
+
+Utilizado como fonte de notícias ambientais.
+
+Método:
 
 - Requests;
 - BeautifulSoup.
 
-Os dados extraídos são armazenados em arquivo CSV antes de serem utilizados pela aplicação.
+Os dados são armazenados em:
 
-## Funcionalidades Implementadas
+`data/processed/noticias_inpe.csv`
 
-Até o TP2, foram implementadas as seguintes funcionalidades:
+Principais campos:
+
+- título;
+- URL.
+
+---
+
+### PRODES / TerraBrasilis
+
+No TP3 foi incorporada uma nova fonte de dados históricos de desmatamento.
+
+Principais campos:
+
+- UF;
+- ano;
+- área desmatada em km².
+
+Os dados são armazenados em:
+
+`data/processed/desmatamento_prodes.csv`
+
+---
+
+## Uso de Selenium
+
+A página do TerraBrasilis carrega os dados através de JavaScript.
+
+Por isso, o Selenium foi utilizado para acessar o conteúdo renderizado da página.
+
+O processo é:
+
+TerraBrasilis  
+↓  
+Selenium  
+↓  
+HTML renderizado  
+↓  
+BeautifulSoup  
+↓  
+CSV
+
+O HTML renderizado também é salvo em:
+
+`data/raw/terrabrasilis_prodes_renderizado.html`
+
+A coleta é executada separadamente da aplicação Streamlit.
+
+---
+
+## Funcionalidades Principais
+
+A aplicação atualmente oferece:
 
 - seleção de cidades;
-- escolha dos indicadores exibidos;
-- exibição dinâmica de gráficos;
-- exibição ou ocultação de tabelas;
-- métricas de temperatura e precipitação;
-- coleta de dados meteorológicos por API;
-- coleta de notícias ambientais por WebScraping;
-- armazenamento dos dados coletados em CSV;
-- tabela com notícias ambientais e links;
-- estatísticas básicas sobre os títulos das notícias;
-- identificação das palavras mais frequentes;
-- geração de nuvem de palavras;
-- uso de cache com `st.cache_data`;
-- uso de estado de sessão com `st.session_state`;
-- upload de arquivos CSV;
-- validação básica dos arquivos enviados;
-- exibição de prévia dos dados enviados;
-- download de arquivos CSV;
-- controle de versão com Git;
-- repositório remoto no GitHub;
-- deploy da aplicação Streamlit.
+- dados climáticos;
+- gráficos;
+- métricas;
+- tabelas;
+- notícias ambientais;
+- análise de palavras;
+- nuvem de palavras;
+- upload de CSV;
+- download de CSV;
+- cache;
+- estado de sessão;
+- análise de desmatamento;
+- filtros por UF e ano;
+- comparação histórica;
+- integração com FastAPI;
+- consulta e envio de registros.
 
-## Estrutura Metodológica
+---
 
-O projeto utiliza os princípios das metodologias CRISP-DM e TDSP.
+## API EcoMonitor Brasil
 
-### CRISP-DM
+No TP3 foi criada uma API própria utilizando FastAPI.
 
-As etapas aplicadas ao projeto incluem:
+A API permite consultar e enviar dados sem depender diretamente da interface visual.
 
-1. entendimento do negócio;
+Principais endpoints:
+
+### GET /
+
+Verifica o status da API.
+
+### GET /prodes
+
+Consulta dados de desmatamento.
+
+Permite filtros por:
+
+- UF;
+- ano.
+
+### GET /noticias
+
+Retorna notícias ambientais coletadas do INPE.
+
+### POST /registros
+
+Permite inserir novos registros ambientais.
+
+Campos:
+
+- localidade;
+- indicador;
+- valor;
+- unidade;
+- fonte.
+
+### GET /registros
+
+Retorna os registros enviados anteriormente.
+
+---
+
+## Integração Streamlit e FastAPI
+
+A página **API EcoMonitor** realiza requisições HTTP para a FastAPI.
+
+A integração permite:
+
+- verificar o status da API;
+- consultar dados PRODES;
+- consultar notícias;
+- enviar novos registros;
+- consultar registros armazenados.
+
+Fluxo:
+
+Usuário  
+↓  
+Streamlit  
+↓  
+FastAPI  
+↓  
+Dados processados
+
+---
+
+## Organização dos Dados
+
+Os dados são organizados principalmente em:
+
+### `data/raw/`
+
+Contém dados brutos e snapshots.
+
+### `data/processed/`
+
+Contém dados tratados e utilizados pela aplicação.
+
+Principais arquivos:
+
+- `noticias_inpe.csv`;
+- `desmatamento_prodes.csv`;
+- `registros_ambientais.csv`.
+
+### `data/external/`
+
+Reservado para dados externos complementares.
+
+---
+
+## Metodologia
+
+O projeto utiliza princípios das metodologias:
+
+- CRISP-DM;
+- TDSP.
+
+As principais etapas são:
+
+1. entendimento do problema;
 2. entendimento dos dados;
-3. preparação dos dados;
-4. análise e modelagem;
-5. avaliação;
-6. implantação.
+3. coleta;
+4. preparação;
+5. análise;
+6. avaliação;
+7. implantação.
 
-### TDSP
+O TDSP também orienta a organização das pastas, separação entre coleta, processamento, interface e documentação.
 
-O TDSP é utilizado principalmente para orientar:
+---
 
-- organização dos diretórios;
-- aquisição e armazenamento de dados;
-- separação entre coleta, processamento e interface;
-- documentação do projeto;
-- controle de versão;
-- implantação da aplicação.
+## Tecnologias Utilizadas
+
+- Python;
+- Streamlit;
+- Pandas;
+- Requests;
+- BeautifulSoup;
+- Selenium;
+- Matplotlib;
+- WordCloud;
+- FastAPI;
+- Uvicorn;
+- Pydantic;
+- Git;
+- GitHub;
+- Visual Studio Code.
+
+---
 
 ## Principais Entregáveis
 
-Os principais entregáveis do projeto até o TP2 são:
+Os principais entregáveis atuais são:
 
-- estrutura organizada de diretórios;
 - Project Charter;
 - Data Summary Report;
-- scripts de coleta de dados;
-- arquivos CSV com dados coletados;
-- notebook de exploração;
-- dashboard interativo em Streamlit;
-- WebScraping com BeautifulSoup;
-- estatísticas e nuvem de palavras;
-- funcionalidade de upload e download;
-- repositório Git/GitHub;
-- aplicação publicada na web.
+- scripts de coleta;
+- arquivos CSV;
+- aplicação multipáginas;
+- Dashboard Climático;
+- Radar Ambiental;
+- página Desmatamento PRODES;
+- página Base de Dados;
+- API FastAPI;
+- integração Streamlit/FastAPI;
+- repositório GitHub;
+- aplicação publicada.
+
+---
+
+## Preparação para LLM
+
+O TP3 também prepara o projeto para futuras aplicações com Large Language Models.
+
+Possíveis usos:
+
+- resumo de notícias;
+- classificação temática;
+- análise de sentimento;
+- perguntas e respostas;
+- geração de relatórios;
+- interpretação de indicadores ambientais.
+
+Os cálculos continuarão sendo realizados com Python e Pandas.
+
+O LLM poderá ser utilizado principalmente para explicar, resumir e interpretar os resultados.
+
+---
 
 ## Critérios de Sucesso
 
 O projeto será considerado bem-sucedido quando:
 
-- as fontes de dados forem coletadas corretamente;
+- as fontes forem coletadas corretamente;
 - os dados forem apresentados de forma clara;
-- os filtros e controles da aplicação funcionarem;
-- o usuário puder interagir com os dados;
-- a aplicação permitir integração de novos arquivos CSV;
+- a navegação multipáginas funcionar;
+- os filtros e controles funcionarem;
 - o WebScraping gerar dados utilizáveis;
-- as informações externas forem incorporadas ao dashboard;
-- a aplicação apresentar bom desempenho utilizando cache;
-- o estado da sessão funcionar corretamente;
-- o projeto estiver versionado e publicado;
-- a aplicação puder ser acessada por meio de uma URL pública.
+- o Selenium coletar corretamente os dados dinâmicos;
+- os dados PRODES forem apresentados na aplicação;
+- a FastAPI responder corretamente;
+- os endpoints GET e POST funcionarem;
+- o Streamlit consumir a API;
+- os registros enviados forem armazenados;
+- a documentação estiver atualizada;
+- o projeto estiver preparado para integração futura com LLM.
+
+---
+
+## Riscos e Limitações
+
+As principais limitações são:
+
+- dependência de fontes externas;
+- mudanças na estrutura HTML podem afetar o WebScraping;
+- alterações no TerraBrasilis podem exigir ajustes no Selenium;
+- Selenium possui maior custo computacional;
+- a API está sendo executada localmente durante o desenvolvimento;
+- arquivos CSV possuem limitações para alto volume e múltiplos usuários;
+- futuras respostas de LLM precisarão ser validadas.
+
+---
 
 ## Status Atual
 
-Ao final do TP2, o EcoMonitor Brasil apresenta uma versão funcional e interativa, integrando dados meteorológicos via API, informações ambientais via WebScraping e dados complementares enviados pelo usuário.
+Ao final do TP2, o projeto já possuía:
 
-A aplicação encontra-se organizada, versionada com Git, armazenada no GitHub e preparada para evolução nas próximas etapas do projeto.
+- dados meteorológicos;
+- WebScraping de notícias;
+- visualizações;
+- análise textual;
+- upload e download;
+- cache;
+- estado de sessão;
+- GitHub;
+- deploy Streamlit.
+
+No TP3 foram adicionados:
+
+- aplicação multipáginas;
+- menu de navegação;
+- nova página PRODES;
+- coleta com Selenium;
+- dados históricos de desmatamento;
+- FastAPI;
+- endpoints GET e POST;
+- integração Streamlit/FastAPI;
+- preparação para uso de LLM.
+
+---
+
+## Próximas Etapas
+
+As próximas evoluções possíveis incluem:
+
+- integração com LLM;
+- resumo automático de notícias;
+- classificação textual;
+- perguntas e respostas;
+- geração de relatórios ambientais;
+- novos indicadores;
+- novas fontes de dados;
+- publicação externa da FastAPI.
+
+---
+
+## Conclusão
+
+O EcoMonitor Brasil evoluiu de um dashboard ambiental para uma aplicação multipáginas capaz de integrar diferentes formas de aquisição e disponibilização de dados.
+
+O projeto utiliza:
+
+- API externa;
+- WebScraping;
+- Selenium;
+- arquivos CSV;
+- Streamlit;
+- FastAPI.
+
+A arquitetura atual permite separar coleta, processamento, visualização e acesso aos dados, tornando o projeto mais organizado e preparado para futuras funcionalidades baseadas em Inteligência Artificial.
