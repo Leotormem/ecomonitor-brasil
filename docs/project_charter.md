@@ -21,6 +21,8 @@ No TP3, o projeto também passou a incorporar:
 - integração com dados históricos de desmatamento;
 - criação de uma API própria;
 - integração entre Streamlit e FastAPI;
+- publicação da API em ambiente web;
+- integração online entre frontend e backend;
 - preparação para futuras aplicações com LLM.
 
 ---
@@ -46,6 +48,9 @@ Desenvolver uma aplicação interativa em Python e Streamlit capaz de integrar, 
 - Criar uma API própria com FastAPI.
 - Implementar endpoints GET e POST.
 - Integrar Streamlit e FastAPI.
+- Publicar o Streamlit em ambiente web.
+- Publicar a FastAPI em ambiente web.
+- Garantir comunicação online entre Streamlit e FastAPI.
 - Preparar o projeto para futuras funcionalidades com LLM.
 
 ---
@@ -134,8 +139,10 @@ O projeto contempla:
 - FastAPI;
 - endpoints GET e POST;
 - integração Streamlit/FastAPI;
+- publicação do Streamlit;
+- publicação da FastAPI;
+- integração online entre os serviços;
 - Git e GitHub;
-- publicação da aplicação;
 - preparação para uso futuro de LLM.
 
 ---
@@ -336,6 +343,44 @@ Dados processados
 
 ---
 
+## Publicação da Aplicação
+
+A aplicação Streamlit está publicada no Streamlit Community Cloud.
+
+URL:
+
+https://ecomonitor-brasil-wqhkx2ffy8cqvappehedvjy.streamlit.app/
+
+---
+
+## Publicação da FastAPI
+
+A API EcoMonitor está publicada no Render.
+
+URL:
+
+https://ecomonitor-api-7pvm.onrender.com
+
+Documentação Swagger:
+
+https://ecomonitor-api-7pvm.onrender.com/docs
+
+A aplicação Streamlit publicada utiliza a URL pública da API para realizar suas consultas.
+
+Dessa forma, a integração Streamlit/FastAPI também funciona no ambiente online.
+
+---
+
+## Repositório
+
+O código-fonte está versionado com Git e armazenado no GitHub.
+
+Repositório:
+
+https://github.com/Leotormem/ecomonitor-brasil
+
+---
+
 ## Organização dos Dados
 
 Os dados são organizados principalmente em:
@@ -396,6 +441,8 @@ O TDSP também orienta a organização das pastas, separação entre coleta, pro
 - Pydantic;
 - Git;
 - GitHub;
+- Streamlit Community Cloud;
+- Render;
 - Visual Studio Code.
 
 ---
@@ -415,8 +462,10 @@ Os principais entregáveis atuais são:
 - página Base de Dados;
 - API FastAPI;
 - integração Streamlit/FastAPI;
-- repositório GitHub;
-- aplicação publicada.
+- API publicada;
+- aplicação Streamlit publicada;
+- integração online funcionando;
+- repositório GitHub.
 
 ---
 
@@ -454,6 +503,9 @@ O projeto será considerado bem-sucedido quando:
 - os endpoints GET e POST funcionarem;
 - o Streamlit consumir a API;
 - os registros enviados forem armazenados;
+- a aplicação Streamlit estiver publicada;
+- a FastAPI estiver publicada;
+- a integração online entre Streamlit e FastAPI funcionar;
 - a documentação estiver atualizada;
 - o projeto estiver preparado para integração futura com LLM.
 
@@ -467,8 +519,8 @@ As principais limitações são:
 - mudanças na estrutura HTML podem afetar o WebScraping;
 - alterações no TerraBrasilis podem exigir ajustes no Selenium;
 - Selenium possui maior custo computacional;
-- a API está sendo executada localmente durante o desenvolvimento;
 - arquivos CSV possuem limitações para alto volume e múltiplos usuários;
+- serviços gratuitos de hospedagem podem apresentar maior tempo de resposta após períodos de inatividade;
 - futuras respostas de LLM precisarão ser validadas.
 
 ---
@@ -497,6 +549,8 @@ No TP3 foram adicionados:
 - FastAPI;
 - endpoints GET e POST;
 - integração Streamlit/FastAPI;
+- publicação da FastAPI no Render;
+- integração online com o Streamlit Community Cloud;
 - preparação para uso de LLM.
 
 ---
@@ -512,7 +566,7 @@ As próximas evoluções possíveis incluem:
 - geração de relatórios ambientais;
 - novos indicadores;
 - novas fontes de dados;
-- publicação externa da FastAPI.
+- migração de CSV para banco de dados.
 
 ---
 
@@ -529,4 +583,8 @@ O projeto utiliza:
 - Streamlit;
 - FastAPI.
 
-A arquitetura atual permite separar coleta, processamento, visualização e acesso aos dados, tornando o projeto mais organizado e preparado para futuras funcionalidades baseadas em Inteligência Artificial.
+Além da aplicação Streamlit publicada no Streamlit Community Cloud, a FastAPI também foi publicada no Render.
+
+A comunicação entre os dois serviços foi validada em ambiente online, permitindo consultas e envio de dados através da aplicação publicada.
+
+A arquitetura atual separa coleta, processamento, visualização e acesso aos dados, tornando o projeto mais organizado e preparado para futuras funcionalidades baseadas em Inteligência Artificial.

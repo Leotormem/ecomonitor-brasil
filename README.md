@@ -13,6 +13,26 @@ O projeto está relacionado principalmente ao pilar **Environmental (E)** do ESG
 
 ---
 
+## Links do Projeto
+
+### Repositório GitHub
+
+https://github.com/Leotormem/ecomonitor-brasil
+
+### Aplicação Streamlit
+
+https://ecomonitor-brasil-wqhkx2ffy8cqvappehedvjy.streamlit.app/
+
+### API EcoMonitor
+
+https://ecomonitor-api-7pvm.onrender.com
+
+### Documentação da API
+
+https://ecomonitor-api-7pvm.onrender.com/docs
+
+---
+
 ## Funcionalidades
 
 Atualmente, o EcoMonitor Brasil possui:
@@ -34,6 +54,8 @@ Atualmente, o EcoMonitor Brasil possui:
 - endpoints GET;
 - endpoint POST;
 - integração entre Streamlit e FastAPI;
+- API publicada no Render;
+- Streamlit publicado no Streamlit Community Cloud;
 - preparação para futuras funcionalidades com LLM.
 
 ---
@@ -204,6 +226,10 @@ Arquivo principal:
 
 `api/main.py`
 
+A API está publicada no Render:
+
+https://ecomonitor-api-7pvm.onrender.com
+
 Principais endpoints:
 
 ### GET /
@@ -243,15 +269,22 @@ Retorna os registros ambientais armazenados.
 
 ## Documentação da API
 
-Com a API em execução, a documentação automática pode ser acessada em:
+A documentação automática da API está disponível em:
 
-`http://127.0.0.1:8000/docs`
+https://ecomonitor-api-7pvm.onrender.com/docs
 
-A interface permite testar os endpoints diretamente pelo navegador.
+A interface permite:
+
+- consultar os endpoints;
+- visualizar parâmetros;
+- visualizar modelos;
+- executar requisições GET;
+- executar requisições POST;
+- verificar as respostas da API.
 
 ---
 
-## Como Executar o Projeto
+## Como Executar o Projeto Localmente
 
 ### 1. Criar o ambiente virtual
 
@@ -259,17 +292,11 @@ No PowerShell:
 
 `python -m venv .venv`
 
----
-
 ### 2. Ativar o ambiente virtual
-
-No Windows PowerShell:
 
 `.venv\Scripts\Activate.ps1`
 
----
-
-### 3. Instalar as dependências
+### 3. Instalar as dependências da aplicação
 
 `pip install -r requirements.txt`
 
@@ -281,55 +308,39 @@ Na raiz do projeto:
 
 `streamlit run app/app.py`
 
-A aplicação será aberta no navegador.
-
 Normalmente, o endereço local será:
 
 `http://localhost:8501`
 
 ---
 
-## Executar a API FastAPI
+## Executar a API FastAPI Localmente
 
-Abra outro terminal com o ambiente virtual ativado.
+Para instalar as dependências da API:
 
-Execute:
+`pip install -r requirements-api.txt`
+
+Depois execute:
 
 `uvicorn api.main:app --reload`
 
-A API será disponibilizada em:
+A API local será disponibilizada em:
 
 `http://127.0.0.1:8000`
 
-A documentação estará disponível em:
+A documentação local ficará disponível em:
 
 `http://127.0.0.1:8000/docs`
 
 ---
 
-## Executar Streamlit e FastAPI Juntos
-
-Para utilizar a página API EcoMonitor corretamente, os dois serviços precisam estar ativos.
-
-Terminal 1:
-
-`streamlit run app/app.py`
-
-Terminal 2:
-
-`uvicorn api.main:app --reload`
-
-Durante o desenvolvimento local, a página Streamlit utiliza:
-
-`http://127.0.0.1:8000`
-
-como endereço da API.
-
----
-
 ## Executar a Coleta PRODES
 
-Para atualizar os dados de desmatamento:
+Para instalar as dependências da coleta:
+
+`pip install -r requirements-coleta.txt`
+
+Depois execute:
 
 `python src/data/coleta_prodes_selenium.py`
 
@@ -347,6 +358,30 @@ Arquivos gerados:
 `data/raw/terrabrasilis_prodes_renderizado.html`
 
 `data/processed/desmatamento_prodes.csv`
+
+---
+
+## Integração em Produção
+
+A aplicação publicada no Streamlit Community Cloud se comunica diretamente com a API publicada no Render.
+
+Fluxo:
+
+Usuário  
+↓  
+Streamlit Community Cloud  
+↓  
+FastAPI no Render  
+↓  
+Dados processados
+
+Aplicação:
+
+https://ecomonitor-brasil-wqhkx2ffy8cqvappehedvjy.streamlit.app/
+
+API:
+
+https://ecomonitor-api-7pvm.onrender.com
 
 ---
 
@@ -393,6 +428,7 @@ ecomonitor-brasil/
 - README.md
 - requirements.txt
 - requirements-api.txt
+- requirements-coleta.txt
 
 ---
 
@@ -446,6 +482,8 @@ Campos:
 - Pydantic;
 - Git;
 - GitHub;
+- Streamlit Community Cloud;
+- Render;
 - Visual Studio Code.
 
 ---
@@ -497,8 +535,8 @@ Algumas limitações do projeto são:
 - mudanças no TerraBrasilis podem exigir ajustes no Selenium;
 - Selenium possui maior custo computacional;
 - os registros da API são armazenados em CSV;
-- a FastAPI é executada localmente durante o desenvolvimento;
-- para integração online completa, a API deverá ser publicada separadamente.
+- serviços gratuitos de hospedagem podem apresentar maior tempo de resposta após períodos de inatividade;
+- arquivos CSV possuem limitações para cenários com grande volume de dados ou muitos usuários simultâneos.
 
 ---
 
@@ -528,7 +566,9 @@ O projeto atualmente possui:
 - coleta dinâmica com Selenium;
 - FastAPI funcional;
 - endpoints GET e POST;
-- integração Streamlit/FastAPI;
+- FastAPI publicada no Render;
+- Streamlit publicado no Streamlit Community Cloud;
+- integração online Streamlit/FastAPI;
 - documentação atualizada;
 - estrutura preparada para futuras funcionalidades com LLM.
 
@@ -545,7 +585,7 @@ As próximas evoluções podem incluir:
 - geração automática de relatórios;
 - novas fontes de dados;
 - novos indicadores ambientais;
-- publicação da FastAPI em ambiente externo.
+- migração da persistência em CSV para banco de dados.
 
 ---
 

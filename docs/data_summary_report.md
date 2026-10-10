@@ -306,11 +306,11 @@ A página Base de Dados permite:
 
 Os dados são organizados principalmente em:
 
-`data/raw/`
+### `data/raw/`
 
 Utilizado para dados brutos e snapshots.
 
-`data/processed/`
+### `data/processed/`
 
 Utilizado para dados tratados e prontos para análise.
 
@@ -320,7 +320,7 @@ Principais arquivos:
 - `desmatamento_prodes.csv`;
 - `registros_ambientais.csv`.
 
-`data/external/`
+### `data/external/`
 
 Reservado para arquivos externos complementares.
 
@@ -339,7 +339,7 @@ As validações variam de acordo com a fonte.
 ### Notícias INPE
 
 - título não vazio;
-- URL válida;
+- URL disponível;
 - remoção de duplicidades.
 
 ### PRODES
@@ -390,27 +390,35 @@ Principais endpoints:
 - `POST /registros`
 - `GET /registros`
 
-A documentação automática está disponível em:
+A API foi publicada no Render.
 
-`/docs`
+URL:
 
-Durante o desenvolvimento local, a API utiliza:
+https://ecomonitor-api-7pvm.onrender.com
 
-`http://127.0.0.1:8000`
+Documentação:
+
+https://ecomonitor-api-7pvm.onrender.com/docs
 
 ---
 
 ## 18. Integração Streamlit e FastAPI
 
-A página API EcoMonitor realiza requisições para a FastAPI.
+A página API EcoMonitor realiza requisições para a FastAPI publicada no Render.
+
+A aplicação Streamlit está publicada em:
+
+https://ecomonitor-brasil-wqhkx2ffy8cqvappehedvjy.streamlit.app/
+
+A comunicação entre os dois serviços foi validada em ambiente online.
 
 Fluxo de consulta:
 
 Usuário  
 ↓  
-Streamlit  
+Streamlit Community Cloud  
 ↓  
-FastAPI  
+FastAPI no Render  
 ↓  
 CSV  
 ↓  
@@ -426,13 +434,29 @@ Formulário Streamlit
 ↓  
 POST  
 ↓  
-FastAPI  
+FastAPI no Render  
 ↓  
 CSV
 
 ---
 
-## 19. Limitações
+## 19. Persistência
+
+Atualmente, os dados enviados pela API são armazenados em arquivo CSV.
+
+Essa solução é suficiente para o escopo acadêmico atual.
+
+Entretanto, para cenários com maior volume ou múltiplos usuários simultâneos, uma evolução futura poderá utilizar banco de dados.
+
+Possíveis opções:
+
+- PostgreSQL;
+- SQLite;
+- outro sistema relacional.
+
+---
+
+## 20. Limitações
 
 As principais limitações atuais são:
 
@@ -441,13 +465,13 @@ As principais limitações atuais são:
 - Selenium depende da estrutura atual do TerraBrasilis;
 - a coleta PRODES precisa ser executada novamente para atualização;
 - os registros da API são armazenados em CSV;
-- CSV não é ideal para muitos usuários simultâneos;
-- a FastAPI está sendo executada localmente no desenvolvimento;
+- arquivos CSV não são ideais para alto volume ou escrita simultânea;
+- serviços gratuitos de hospedagem podem apresentar maior tempo de resposta após períodos de inatividade;
 - a base de notícias contém principalmente títulos e links.
 
 ---
 
-## 20. Preparação para LLM
+## 21. Preparação para LLM
 
 Os dados atuais já permitem preparar futuras funcionalidades baseadas em Large Language Models.
 
@@ -466,7 +490,7 @@ O LLM poderá ser utilizado principalmente para interpretar e apresentar os resu
 
 ---
 
-## 21. Fluxo Geral dos Dados
+## 22. Fluxo Geral dos Dados
 
 Open-Meteo  
 ↓  
@@ -494,9 +518,9 @@ Desmatamento PRODES / FastAPI
 
 Usuário  
 ↓  
-Streamlit  
+Streamlit Cloud  
 ↓  
-FastAPI  
+FastAPI no Render  
 ↓  
 `registros_ambientais.csv`
 
@@ -514,6 +538,8 @@ O TerraBrasilis fornece dados dinâmicos de desmatamento coletados com Selenium 
 
 A FastAPI permite consultar os dados processados e inserir novos registros.
 
+A API foi publicada no Render e está integrada à aplicação Streamlit publicada no Streamlit Community Cloud.
+
 O Streamlit concentra a visualização e a interação com o usuário.
 
 A organização atual separa:
@@ -524,4 +550,4 @@ A organização atual separa:
 - API;
 - visualização.
 
-Essa estrutura melhora a organização do projeto e também prepara a aplicação para futuras funcionalidades baseadas em Inteligência Artificial e Large Language Models.
+Essa estrutura melhora a organização do projeto e prepara a aplicação para futuras funcionalidades baseadas em Inteligência Artificial e Large Language Models.

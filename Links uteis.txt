@@ -4,5 +4,11 @@ Plataforma interativa para monitoramento de indicadores ambientais e sustentabil
 
 ## Links do projeto
 
-- Aplicação online: https://ecomonitor-brasil-wqhkx2ffy8cqvappehedvjy.streamlit.app/
-- Repositório GitHub: https://github.com/Leotormem/ecomonitor-brasil
+Streamlit:
+https://ecomonitor-brasil-wqhkx2ffy8cqvappehedvjy.streamlit.app/
+
+API:
+https://ecomonitor-api-7pvm.onrender.com
+
+Swagger / Docs:
+https://ecomonitor-api-7pvm.onrender.com/docs
