@@ -522,6 +522,8 @@ As principais limitações são:
 - arquivos CSV possuem limitações para alto volume e múltiplos usuários;
 - serviços gratuitos de hospedagem podem apresentar maior tempo de resposta após períodos de inatividade;
 - futuras respostas de LLM precisarão ser validadas.
+- os registros enviados pelo endpoint `POST /registros` são armazenados atualmente em arquivo CSV no disco do serviço Render;
+- no plano gratuito do Render, esse disco é efêmero, portanto os registros podem ser perdidos após reinicializações, reconstruções ou novos deploys do serviço.
 
 ---
 

@@ -1,0 +1,31 @@
+texto,categoria_esperada
+"Focos de incêndio avançam sobre área de vegetação durante período de seca intensa",queimada
+"Brigadistas combatem incêndio florestal próximo a unidade de conservação",queimada
+"Satélites registram aumento de queimadas em região amazônica",queimada
+"Fumaça causada por incêndios reduz a visibilidade em rodovias",queimada
+"Incêndio atinge área de mata e mobiliza equipes ambientais",queimada
+"Dados apontam crescimento da área desmatada em região da Amazônia",desmatamento
+"Monitoramento identifica retirada ilegal de vegetação nativa",desmatamento
+"Desmatamento avança em área protegida segundo levantamento por satélite",desmatamento
+"Área de floresta foi removida para abertura de novas áreas rurais",desmatamento
+"PRODES registra aumento da perda de cobertura florestal em determinado estado",desmatamento
+"Temperaturas máximas ficam acima da média durante onda de calor",clima
+"Previsão indica fortes chuvas e possibilidade de tempestades nos próximos dias",clima
+"Período de estiagem reduz volume de chuvas em diversas cidades",clima
+"Mudanças nas condições atmosféricas provocam queda acentuada de temperatura",clima
+"Volume de precipitação supera média histórica no início do mês",clima
+"Pesquisa identifica novas espécies em área de floresta preservada",biodiversidade
+"População de animais silvestres apresenta redução em habitat natural",biodiversidade
+"Projeto acompanha recuperação de espécies ameaçadas de extinção",biodiversidade
+"Estudo analisa diversidade de plantas em ecossistema brasileiro",biodiversidade
+"Conservação de habitats contribui para proteção da fauna e da flora",biodiversidade
+"Rio apresenta contaminação causada pelo descarte irregular de resíduos",poluicao
+"Qualidade do ar piora devido à concentração elevada de poluentes",poluicao
+"Resíduos plásticos são encontrados em grande quantidade em área costeira",poluicao
+"Despejo irregular de esgoto compromete a qualidade da água",poluicao
+"Análise identifica presença de substâncias poluentes em curso d'água",poluicao
+"Satélites acompanham alterações ambientais em diferentes regiões do país",monitoramento_ambiental
+"INPE amplia sistema de acompanhamento de áreas ambientais por imagens",monitoramento_ambiental
+"Nova plataforma permite visualizar indicadores ambientais em tempo quase real",monitoramento_ambiental
+"Equipe utiliza sensoriamento remoto para acompanhar mudanças na vegetação",monitoramento_ambiental
+"Sistema de observação ambiental reúne dados de diferentes sensores",monitoramento_ambiental

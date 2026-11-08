@@ -468,6 +468,8 @@ As principais limitações atuais são:
 - arquivos CSV não são ideais para alto volume ou escrita simultânea;
 - serviços gratuitos de hospedagem podem apresentar maior tempo de resposta após períodos de inatividade;
 - a base de notícias contém principalmente títulos e links.
+- os registros enviados por `POST /registros` são armazenados em `data/processed/registros_ambientais.csv`;
+- quando a API está publicada no plano gratuito do Render, esse arquivo fica em armazenamento efêmero e pode ser perdido após reinicializações, reconstruções ou novos deploys do serviço.
 
 ---
 

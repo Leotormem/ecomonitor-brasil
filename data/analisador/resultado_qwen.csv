@@ -1,0 +1,93 @@
+texto,categoria_esperada,categoria_prevista,resposta_modelo,tempo_segundos,acertou
+Focos de incêndio avançam sobre área de vegetação durante período de seca intensa,queimada,,"incêndio
+
+Explicação: O texto menciona focos de incêndio",6.7292,False
+Brigadistas combatem incêndio florestal próximo a unidade de conservação,queimada,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto menciona brigadistas e incê",6.4635,False
+Satélites registram aumento de queimadas em região amazônica,queimada,queimada,"Aumento_de_queimadas
+
+Explicação: O texto menciona a ""queim",6.2768,True
+Fumaça causada por incêndios reduz a visibilidade em rodovias,queimada,desmatamento,"desmatamento
+
+Explicação: O texto menciona fumaça causada por incê",6.4495,False
+Incêndio atinge área de mata e mobiliza equipes ambientais,queimada,,"incêndio
+
+Explicação: O texto menciona um incêndio que está",6.2336,False
+Dados apontam crescimento da área desmatada em região da Amazônia,desmatamento,desmatamento,"desmatamento
+
+Explicação: O texto menciona que há um aumento na área desmat",6.3182,True
+Monitoramento identifica retirada ilegal de vegetação nativa,desmatamento,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto menciona um monitoramento que identific",6.1275,False
+Desmatamento avança em área protegida segundo levantamento por satélite,desmatamento,desmatamento,"desmatamento
+
+Explicação: O texto menciona ""desmatamento"", que é a",6.3374,True
+Área de floresta foi removida para abertura de novas áreas rurais,desmatamento,desmatamento,"desmatamento
+
+Explicação: O texto menciona a remoção de área de flo",6.5429,True
+PRODES registra aumento da perda de cobertura florestal em determinado estado,desmatamento,desmatamento,"desmatamento
+
+Explicação: O texto menciona a perda de cobertura florest",6.4489,True
+Temperaturas máximas ficam acima da média durante onda de calor,clima,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto menciona temperaturas máximas ac",6.3449,False
+Previsão indica fortes chuvas e possibilidade de tempestades nos próximos dias,clima,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto não menciona aspectos relacionados a",6.6043,False
+Período de estiagem reduz volume de chuvas em diversas cidades,clima,desmatamento,"desmatamento
+
+Explicação: O texto menciona que a período de esti",6.7562,False
+Mudanças nas condições atmosféricas provocam queda acentuada de temperatura,clima,desmatamento,"desmatamento
+clima
+poluicao
+monitoramento_ambiental
+biodivers",6.4079,False
+Volume de precipitação supera média histórica no início do mês,clima,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto não menciona aspectos relacionados a",6.4858,False
+Pesquisa identifica novas espécies em área de floresta preservada,biodiversidade,desmatamento,"desmatamento
+
+Explicação: O texto menciona a descoberta de novas esp",6.6638,False
+População de animais silvestres apresenta redução em habitat natural,biodiversidade,desmatamento,"desmatamento
+
+Explicação: O texto menciona a redução na população de animais",6.2261,False
+Projeto acompanha recuperação de espécies ameaçadas de extinção,biodiversidade,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto menciona um projeto que está se dedic",6.4113,False
+Estudo analisa diversidade de plantas em ecossistema brasileiro,biodiversidade,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto se refere a um estudo sobre a",6.1606,False
+Conservação de habitats contribui para proteção da fauna e da flora,biodiversidade,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto se refere à conservação de habitats que",6.2575,False
+Rio apresenta contaminação causada pelo descarte irregular de resíduos,poluicao,desmatamento,"desmatamento
+
+Explicação: O texto menciona a contaminação do rio por causa",6.3417,False
+Qualidade do ar piora devido à concentração elevada de poluentes,poluicao,poluicao,"poluicao
+
+Explicação: O texto menciona a qualidade do ar piorando e",6.4014,True
+Resíduos plásticos são encontrados em grande quantidade em área costeira,poluicao,desmatamento,"desmatamento
+
+Explicação: O texto menciona resíduos plásticos e",6.3291,False
+Despejo irregular de esgoto compromete a qualidade da água,poluicao,desmatamento,"desmatamento
+
+Explicação: O texto menciona um problema relacionado à qualidade da água",6.1196,False
+Análise identifica presença de substâncias poluentes em curso d'água,poluicao,poluicao,"poluicao
+
+Explicação: O texto menciona a presença de substâncias poluentes",6.2941,True
+Satélites acompanham alterações ambientais em diferentes regiões do país,monitoramento_ambiental,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto menciona a utilização de satél",6.5888,True
+INPE amplia sistema de acompanhamento de áreas ambientais por imagens,monitoramento_ambiental,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto menciona um sistema de acompanhamento de",6.1541,True
+Nova plataforma permite visualizar indicadores ambientais em tempo quase real,monitoramento_ambiental,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: A nova plataforma mencionada no texto é foc",6.1756,True
+Equipe utiliza sensoriamento remoto para acompanhar mudanças na vegetação,monitoramento_ambiental,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto menciona a utilização de um tipo",6.4279,True
+Sistema de observação ambiental reúne dados de diferentes sensores,monitoramento_ambiental,monitoramento_ambiental,"monitoramento_ambiental
+
+Explicação: O texto menciona um sistema de observação ambient",6.5266,True

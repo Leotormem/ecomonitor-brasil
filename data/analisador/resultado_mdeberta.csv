@@ -1,0 +1,31 @@
+texto,categoria_esperada,categoria_prevista,confianca,tempo_segundos,acertou
+Focos de incêndio avançam sobre área de vegetação durante período de seca intensa,queimada,queimada,0.6092,3.1311,True
+Brigadistas combatem incêndio florestal próximo a unidade de conservação,queimada,queimada,0.8004,3.2487,True
+Satélites registram aumento de queimadas em região amazônica,queimada,queimada,0.5189,3.4284,True
+Fumaça causada por incêndios reduz a visibilidade em rodovias,queimada,poluicao,0.4949,3.59,False
+Incêndio atinge área de mata e mobiliza equipes ambientais,queimada,monitoramento_ambiental,0.364,3.5434,False
+Dados apontam crescimento da área desmatada em região da Amazônia,desmatamento,desmatamento,0.7981,3.7771,True
+Monitoramento identifica retirada ilegal de vegetação nativa,desmatamento,monitoramento_ambiental,0.5394,3.8256,False
+Desmatamento avança em área protegida segundo levantamento por satélite,desmatamento,desmatamento,0.4107,3.9445,True
+Área de floresta foi removida para abertura de novas áreas rurais,desmatamento,biodiversidade,0.3926,4.4689,False
+PRODES registra aumento da perda de cobertura florestal em determinado estado,desmatamento,monitoramento_ambiental,0.5058,3.8012,False
+Temperaturas máximas ficam acima da média durante onda de calor,clima,clima,0.8901,3.6882,True
+Previsão indica fortes chuvas e possibilidade de tempestades nos próximos dias,clima,clima,0.8412,3.8781,True
+Período de estiagem reduz volume de chuvas em diversas cidades,clima,clima,0.7244,3.6221,True
+Mudanças nas condições atmosféricas provocam queda acentuada de temperatura,clima,clima,0.9797,3.4224,True
+Volume de precipitação supera média histórica no início do mês,clima,clima,0.4364,3.3929,True
+Pesquisa identifica novas espécies em área de floresta preservada,biodiversidade,biodiversidade,0.8661,3.6724,True
+População de animais silvestres apresenta redução em habitat natural,biodiversidade,biodiversidade,0.6865,3.4097,True
+Projeto acompanha recuperação de espécies ameaçadas de extinção,biodiversidade,biodiversidade,0.7437,3.4449,True
+Estudo analisa diversidade de plantas em ecossistema brasileiro,biodiversidade,biodiversidade,0.9096,3.4253,True
+Conservação de habitats contribui para proteção da fauna e da flora,biodiversidade,biodiversidade,0.7888,3.4724,True
+Rio apresenta contaminação causada pelo descarte irregular de resíduos,poluicao,poluicao,0.9315,3.4126,True
+Qualidade do ar piora devido à concentração elevada de poluentes,poluicao,poluicao,0.979,3.4613,True
+Resíduos plásticos são encontrados em grande quantidade em área costeira,poluicao,poluicao,0.729,3.6094,True
+Despejo irregular de esgoto compromete a qualidade da água,poluicao,poluicao,0.5328,3.4934,True
+Análise identifica presença de substâncias poluentes em curso d'água,poluicao,monitoramento_ambiental,0.5851,3.7916,False
+Satélites acompanham alterações ambientais em diferentes regiões do país,monitoramento_ambiental,monitoramento_ambiental,0.9502,3.479,True
+INPE amplia sistema de acompanhamento de áreas ambientais por imagens,monitoramento_ambiental,monitoramento_ambiental,0.9854,3.5551,True
+Nova plataforma permite visualizar indicadores ambientais em tempo quase real,monitoramento_ambiental,monitoramento_ambiental,0.9926,3.5209,True
+Equipe utiliza sensoriamento remoto para acompanhar mudanças na vegetação,monitoramento_ambiental,monitoramento_ambiental,0.8854,3.5682,True
+Sistema de observação ambiental reúne dados de diferentes sensores,monitoramento_ambiental,monitoramento_ambiental,0.9956,3.4377,True

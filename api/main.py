@@ -1,8 +1,15 @@
+from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Literal
 
 import pandas as pd
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
+from src.analysis.analisador_llm import (
+    carregar_modelo,
+    classificar_texto,
+)
 
 
 # =========================================================
@@ -34,21 +41,53 @@ REGISTROS_PATH = (
 
 
 # =========================================================
+# MOTOR LLM
+# =========================================================
+
+MOTORES = {}
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+
+    try:
+        MOTORES["analise"] = carregar_modelo()
+
+        print(
+            "[LLM] Modelo carregado com sucesso."
+        )
+
+    except Exception as erro:
+        MOTORES["analise"] = None
+
+        print(
+            "[LLM] Modelo não carregado:",
+            erro,
+        )
+
+    yield
+
+    MOTORES.clear()
+
+
+# =========================================================
 # CONFIGURAÇÃO DA API
 # =========================================================
 
 app = FastAPI(
     title="EcoMonitor Brasil API",
     description=(
-        "API para consulta e envio de dados ambientais "
-        "utilizados pela plataforma EcoMonitor Brasil."
+        "API para consulta, envio e análise "
+        "de dados ambientais utilizados pela "
+        "plataforma EcoMonitor Brasil."
     ),
-    version="1.0.0",
+    version="1.1.0",
+    lifespan=lifespan,
 )
 
 
 # =========================================================
-# MODELO DO POST
+# MODELO DO POST — REGISTRO AMBIENTAL
 # =========================================================
 
 class RegistroAmbiental(BaseModel):
@@ -88,6 +127,76 @@ class RegistroAmbiental(BaseModel):
 
 
 # =========================================================
+# MODELOS — ANÁLISE COM LLM
+# =========================================================
+
+CategoriaAmbiental = Literal[
+    "queimada",
+    "desmatamento",
+    "clima",
+    "biodiversidade",
+    "poluicao",
+    "monitoramento_ambiental",
+]
+
+
+class PedidoAnalise(BaseModel):
+
+    model_config = ConfigDict(
+        extra="forbid",
+        str_strip_whitespace=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "texto": (
+                        "Satélites registram aumento da área "
+                        "desmatada em região da Amazônia."
+                    ),
+                    "tipo_analise": "classificacao",
+                }
+            ]
+        },
+    )
+
+    texto: str = Field(
+        ...,
+        min_length=15,
+        max_length=2000,
+        description=(
+            "Texto ambiental que será classificado "
+            "pelo modelo local."
+        ),
+    )
+
+    tipo_analise: Literal[
+        "classificacao"
+    ] = "classificacao"
+
+
+class ResultadoAnalise(BaseModel):
+
+    tipo_analise: Literal[
+        "classificacao"
+    ]
+
+    texto: str
+
+    categoria_sugerida: (
+        CategoriaAmbiental | None
+    )
+
+    confianca: float = Field(
+        ...,
+        ge=0,
+        le=1,
+    )
+
+    pistas: list[str]
+
+    motor: str
+
+
+# =========================================================
 # ROTA INICIAL
 # =========================================================
 
@@ -104,7 +213,7 @@ def inicio():
     return {
         "aplicacao": "EcoMonitor Brasil API",
         "status": "online",
-        "versao": "1.0.0",
+        "versao": "1.1.0",
     }
 
 
@@ -253,7 +362,6 @@ def criar_registro(
         ]
     )
 
-
     if REGISTROS_PATH.exists():
 
         df_existente = pd.read_csv(
@@ -272,13 +380,11 @@ def criar_registro(
 
         df_final = novo_registro
 
-
     df_final.to_csv(
         REGISTROS_PATH,
         index=False,
         encoding="utf-8-sig",
     )
-
 
     return {
         "mensagem":
@@ -310,11 +416,9 @@ def consultar_registros():
             "dados": [],
         }
 
-
     df = pd.read_csv(
         REGISTROS_PATH
     )
-
 
     return {
         "total_registros": len(df),
@@ -322,3 +426,87 @@ def consultar_registros():
             orient="records"
         ),
     }
+
+
+# =========================================================
+# POST — PROCESSAR TEXTO COM MODELO LOCAL
+# =========================================================
+
+@app.post(
+    "/processar_texto",
+    response_model=ResultadoAnalise,
+    summary="Classificar texto ambiental com IA local",
+    description=(
+        "Recebe um texto ambiental e utiliza "
+        "o modelo local mDeBERTa para classificá-lo "
+        "em uma das categorias do EcoMonitor Brasil."
+    ),
+)
+def processar_texto(
+    pedido: PedidoAnalise
+):
+
+    classificador = MOTORES.get(
+        "analise"
+    )
+
+    if classificador is None:
+
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Modelo de análise indisponível. "
+                "Verifique se o modelo foi baixado "
+                "e carregado corretamente."
+            ),
+        )
+
+    try:
+
+        resultado = classificar_texto(
+            classificador,
+            pedido.texto,
+        )
+
+    except Exception as erro:
+
+        print(
+            "[LLM] Erro durante classificação:",
+            erro,
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "Erro interno durante "
+                "o processamento do texto."
+            ),
+        )
+
+    return ResultadoAnalise(
+        tipo_analise=
+            pedido.tipo_analise,
+
+        texto=
+            pedido.texto,
+
+        categoria_sugerida=
+            resultado[
+                "categoria_sugerida"
+            ],
+
+        confianca=
+            resultado[
+                "confianca"
+            ],
+
+        pistas=
+            resultado[
+                "pistas"
+            ],
+
+        motor=
+            resultado[
+                "motor"
+            ],
+    )

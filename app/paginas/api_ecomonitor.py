@@ -1,13 +1,16 @@
 import requests
 import pandas as pd
 import streamlit as st
-
+import os
 
 # =========================================================
 # CONFIGURAÇÃO
 # =========================================================
 
-API_BASE_URL = "https://ecomonitor-api-7pvm.onrender.com"
+API_BASE_URL = os.getenv(
+    "ECOMONITOR_API_URL",
+    "http://127.0.0.1:8000"
+)
 
 
 # =========================================================
