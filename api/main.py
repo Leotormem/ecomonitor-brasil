@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Literal
@@ -6,10 +7,35 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
-from src.analysis.analisador_llm import (
-    carregar_modelo,
-    classificar_texto,
+
+# =========================================================
+# AMBIENTE DE EXECUÇÃO
+# =========================================================
+
+EM_RENDER = (
+    os.getenv(
+        "RENDER",
+        "",
+    ).lower()
+    == "true"
 )
+
+
+# =========================================================
+# IMPORTAÇÃO DO MODELO LOCAL
+# =========================================================
+
+if not EM_RENDER:
+
+    from src.analysis.analisador_llm import (
+        carregar_modelo,
+        classificar_texto,
+    )
+
+else:
+
+    carregar_modelo = None
+    classificar_texto = None
 
 
 # =========================================================
@@ -50,20 +76,40 @@ MOTORES = {}
 @asynccontextmanager
 async def lifespan(_: FastAPI):
 
-    try:
-        MOTORES["analise"] = carregar_modelo()
+    if EM_RENDER:
 
-        print(
-            "[LLM] Modelo carregado com sucesso."
-        )
-
-    except Exception as erro:
         MOTORES["analise"] = None
 
         print(
-            "[LLM] Modelo não carregado:",
-            erro,
+            "[LLM] Execução no Render detectada."
         )
+
+        print(
+            "[LLM] Modelo local desativado "
+            "no ambiente de produção."
+        )
+
+    else:
+
+        try:
+
+            MOTORES["analise"] = (
+                carregar_modelo()
+            )
+
+            print(
+                "[LLM] Modelo carregado "
+                "com sucesso."
+            )
+
+        except Exception as erro:
+
+            MOTORES["analise"] = None
+
+            print(
+                "[LLM] Modelo não carregado:",
+                erro,
+            )
 
     yield
 
@@ -95,34 +141,54 @@ class RegistroAmbiental(BaseModel):
     localidade: str = Field(
         ...,
         min_length=2,
-        description="Nome da localidade do registro.",
-        examples=["Cuiabá - MT"],
+        description=(
+            "Nome da localidade do registro."
+        ),
+        examples=[
+            "Cuiabá - MT"
+        ],
     )
 
     indicador: str = Field(
         ...,
         min_length=2,
-        description="Indicador ambiental registrado.",
-        examples=["Temperatura Máxima"],
+        description=(
+            "Indicador ambiental registrado."
+        ),
+        examples=[
+            "Temperatura Máxima"
+        ],
     )
 
     valor: float = Field(
         ...,
-        description="Valor numérico do indicador.",
-        examples=[35.8],
+        description=(
+            "Valor numérico do indicador."
+        ),
+        examples=[
+            35.8
+        ],
     )
 
     unidade: str = Field(
         ...,
         min_length=1,
-        description="Unidade de medida do indicador.",
-        examples=["°C"],
+        description=(
+            "Unidade de medida do indicador."
+        ),
+        examples=[
+            "°C"
+        ],
     )
 
     fonte: str = Field(
         default="Usuário",
-        description="Fonte do dado informado.",
-        examples=["Coleta manual"],
+        description=(
+            "Fonte do dado informado."
+        ),
+        examples=[
+            "Coleta manual"
+        ],
     )
 
 
@@ -149,10 +215,12 @@ class PedidoAnalise(BaseModel):
             "examples": [
                 {
                     "texto": (
-                        "Satélites registram aumento da área "
-                        "desmatada em região da Amazônia."
+                        "Satélites registram "
+                        "aumento da área desmatada "
+                        "em região da Amazônia."
                     ),
-                    "tipo_analise": "classificacao",
+                    "tipo_analise":
+                        "classificacao",
                 }
             ]
         },
@@ -163,8 +231,8 @@ class PedidoAnalise(BaseModel):
         min_length=15,
         max_length=2000,
         description=(
-            "Texto ambiental que será classificado "
-            "pelo modelo local."
+            "Texto ambiental que será "
+            "classificado pelo modelo local."
         ),
     )
 
@@ -202,18 +270,29 @@ class ResultadoAnalise(BaseModel):
 
 @app.get(
     "/",
-    summary="Verificar funcionamento da API",
+    summary=(
+        "Verificar funcionamento da API"
+    ),
     description=(
         "Retorna informações básicas sobre "
-        "o funcionamento da EcoMonitor Brasil API."
+        "o funcionamento da "
+        "EcoMonitor Brasil API."
     ),
 )
 def inicio():
 
     return {
-        "aplicacao": "EcoMonitor Brasil API",
-        "status": "online",
-        "versao": "1.1.0",
+        "aplicacao":
+            "EcoMonitor Brasil API",
+
+        "status":
+            "online",
+
+        "versao":
+            "1.1.0",
+
+        "llm_local_disponivel":
+            not EM_RENDER,
     }
 
 
@@ -223,11 +302,15 @@ def inicio():
 
 @app.get(
     "/prodes",
-    summary="Consultar dados de desmatamento PRODES",
+    summary=(
+        "Consultar dados de "
+        "desmatamento PRODES"
+    ),
     description=(
-        "Consulta os dados históricos de desmatamento "
-        "coletados do PRODES/INPE. "
-        "É possível filtrar por UF e por ano."
+        "Consulta os dados históricos "
+        "de desmatamento coletados do "
+        "PRODES/INPE. É possível filtrar "
+        "por UF e por ano."
     ),
 )
 def consultar_prodes(
@@ -276,10 +359,13 @@ def consultar_prodes(
         )
 
     return {
-        "total_registros": len(df),
-        "dados": df.to_dict(
-            orient="records"
-        ),
+        "total_registros":
+            len(df),
+
+        "dados":
+            df.to_dict(
+                orient="records"
+            ),
     }
 
 
@@ -289,10 +375,14 @@ def consultar_prodes(
 
 @app.get(
     "/noticias",
-    summary="Consultar notícias ambientais do INPE",
+    summary=(
+        "Consultar notícias "
+        "ambientais do INPE"
+    ),
     description=(
-        "Retorna as notícias ambientais coletadas "
-        "do portal do INPE por Web Scraping."
+        "Retorna as notícias ambientais "
+        "coletadas do portal do INPE "
+        "por Web Scraping."
     ),
 )
 def consultar_noticias():
@@ -312,15 +402,18 @@ def consultar_noticias():
     )
 
     return {
-        "total_noticias": len(df),
-        "dados": df[
-            [
-                "titulo",
-                "url",
-            ]
-        ].to_dict(
-            orient="records"
-        ),
+        "total_noticias":
+            len(df),
+
+        "dados":
+            df[
+                [
+                    "titulo",
+                    "url",
+                ]
+            ].to_dict(
+                orient="records"
+            ),
     }
 
 
@@ -331,7 +424,9 @@ def consultar_noticias():
 @app.post(
     "/registros",
     status_code=201,
-    summary="Enviar novo registro ambiental",
+    summary=(
+        "Enviar novo registro ambiental"
+    ),
     description=(
         "Recebe um novo registro ambiental "
         "e armazena o dado em arquivo CSV."
@@ -387,8 +482,10 @@ def criar_registro(
     )
 
     return {
-        "mensagem":
-            "Registro ambiental criado com sucesso.",
+        "mensagem": (
+            "Registro ambiental "
+            "criado com sucesso."
+        ),
 
         "registro":
             registro.model_dump(),
@@ -401,10 +498,14 @@ def criar_registro(
 
 @app.get(
     "/registros",
-    summary="Consultar registros ambientais enviados",
+    summary=(
+        "Consultar registros "
+        "ambientais enviados"
+    ),
     description=(
         "Retorna os registros ambientais "
-        "adicionados através da rota POST /registros."
+        "adicionados através da rota "
+        "POST /registros."
     ),
 )
 def consultar_registros():
@@ -421,10 +522,13 @@ def consultar_registros():
     )
 
     return {
-        "total_registros": len(df),
-        "dados": df.to_dict(
-            orient="records"
-        ),
+        "total_registros":
+            len(df),
+
+        "dados":
+            df.to_dict(
+                orient="records"
+            ),
     }
 
 
@@ -435,11 +539,18 @@ def consultar_registros():
 @app.post(
     "/processar_texto",
     response_model=ResultadoAnalise,
-    summary="Classificar texto ambiental com IA local",
+    summary=(
+        "Classificar texto ambiental "
+        "com IA local"
+    ),
     description=(
-        "Recebe um texto ambiental e utiliza "
-        "o modelo local mDeBERTa para classificá-lo "
-        "em uma das categorias do EcoMonitor Brasil."
+        "Recebe um texto ambiental e "
+        "utiliza o modelo local mDeBERTa "
+        "para classificá-lo em uma das "
+        "categorias do EcoMonitor Brasil. "
+        "O processamento com LLM está "
+        "disponível na execução local "
+        "do projeto."
     ),
 )
 def processar_texto(
@@ -455,9 +566,10 @@ def processar_texto(
         raise HTTPException(
             status_code=503,
             detail=(
-                "Modelo de análise indisponível. "
-                "Verifique se o modelo foi baixado "
-                "e carregado corretamente."
+                "Modelo de análise indisponível "
+                "neste ambiente. "
+                "O processamento com mDeBERTa "
+                "deve ser executado localmente."
             ),
         )
 
